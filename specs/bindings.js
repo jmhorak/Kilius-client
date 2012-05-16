@@ -105,9 +105,9 @@ describe('Knockout copy element binding', function() {
     });
 
     it('should clear the stale flag without reprocessing', function() {
-      spyOn(model, 'positionStale').andCallThrough();
+      spyOn(ko.bindingHandlers.copyElement, 'update').andCallThrough();
       model.positionStale(true);
-      expect(model.positionStale.callCount).toBe(3);
+      expect(ko.bindingHandlers.copyElement.update.callCount).toBe(1);
     });
   })
 });
