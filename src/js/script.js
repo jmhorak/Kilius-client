@@ -291,10 +291,13 @@ function KiliusComms() {
    */
   self.onLinkAddError = function(jqXHR, textStatus, errorThrown) {
     // Check if there is a message in the response text
-    var msg = (jqXHR.responseText ? JSON.parse(jqXHR.responseText) : null);
+    var msg = null;
 
-    if (typeof msg === 'object') {
+    try {
+      msg = JSON.parse(jqXHR.responseText);
       msg = msg.message;
+    } catch (e) {
+      msg = null;
     }
 
     // No message, create one
