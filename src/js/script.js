@@ -83,11 +83,13 @@ ko.bindingHandlers.copyElement = {
 function KiliusLink(content) {
   var self = this;
 
+  content = content || {};
+
   // Static content
-  self.shortLink = content.short;
-  self.longLink = content.long;
-  self.hits = content.hits;
-  self.date = content.date;
+  self.shortLink = content.short || '';
+  self.longLink = content.long || '';
+  self.hits = content.hits || 0;
+  self.date = content.date || new Date();
   self.clip = null;
 
   // Observables
@@ -111,12 +113,8 @@ function KiliusLink(content) {
 function KiliusModel() {
   var self = this;
 
-  // Data
-  self.links = ko.observableArray([]);
-  self.newLink = ko.observable();
-  self.errorMsg = ko.observable('');
+  // Static
   self.user = 'k'; // TODO: Use a real user
-
   // Does the client support animations and flash?
   self.supportAnimation = $('html').hasClass('cssanimations');
   self.supportFlash = (function() {
@@ -127,6 +125,21 @@ function KiliusModel() {
 
     return false;
   })();
+
+  // Observables
+  self.links = ko.observableArray([]);
+  self.newLink = ko.observable();
+
+  // Computed
+  self.errorMsg = ko.computed({
+    read: function() {
+      return kilius.comms.errorMsg()
+    },
+
+    write: function(value) {
+      kilius.comms.errorMsg(value);
+    }
+  });
 
   // Animations
   self.animations = {
@@ -154,73 +167,11 @@ function KiliusModel() {
   });
 
   // Operations
+  /**
+   * Post a link to the server
+   */
   self.postLink = function() {
-    // TODO: Validate
-
-    // AJAX call to POST new URL
-    $.ajax({
-      url: '/+/',
-      type: 'POST',
-      data: JSON.stringify({ url: self.newLink() }),
-      contentType: 'application/json',
-      processData: false,
-
-      /**
-       * AJAX error handler
-       * @param jqXHR {Object} - The jQuery AJAX object
-       * @param textStatus {String} - Status string
-       * @param errorThrown {String} - Error returned
-       */
-      error: function(jqXHR, textStatus, errorThrown) {
-        // Check if there is a message in the response text
-        var msg = (jqXHR.responseText ? JSON.parse(jqXHR.responseText) : null);
-
-        if (typeof msg === 'object') {
-          msg = msg.message;
-        }
-
-        // No message, create one
-        if (!msg) {
-          msg = ['The Kili.us server reported a problem: ',
-                  textStatus ? textStatus[0].toUpperCase() + textStatus.slice(1) : 'Error',
-                  ' - ',
-                  errorThrown ? errorThrown : 'General Error'].join('');
-        }
-
-        // Set the error message
-        self.errorMsg(msg);
-      },
-
-      /**
-       * Callback on AJAX request success
-       * @param data {Object} - The object returned from the server
-       * @param textStatus {String} - String status text
-       * @param jqXHR {Object} - jQuery AJAX object
-       */
-      success: function(data, textStatus, jqXHR) {
-        if (jqXHR.status === 201) {
-          // Add the new link to the beginning of the links array
-          self.links.unshift(new KiliusLink({
-            short: jqXHR.getResponseHeader('Location'),
-            long: self.newLink(),
-            hits: 0,
-            date: new Date()
-          }));
-
-          // Clear existing link
-          self.newLink('');
-
-          // Clear the error message
-          self.errorMsg('');
-
-          self.repositionCopyLinks();
-
-        } else {
-          // Expecting a 201 response
-          self.errorMsg('The server did not reply to the request in the correct format');
-        }
-      }
-    });
+    kilius.comms.postNewLink(self.newLink(), self.addNewLink);
   };
 
   /**
@@ -231,6 +182,48 @@ function KiliusModel() {
       value.positionStale(true);
     });
   };
+
+  /**
+   * Adds several links from the provided JSON
+   * @param json {Object} Historical links for this user
+   */
+  self.addUserHistoryFromJSON = function(json) {
+    var links = json.history || [];
+
+    // Ensure the links list is sorted by date
+    links.sort(function(a, b) {
+      return b.date - a.date;
+    });
+
+    // Populate the links list
+    $.each(links, function(index, value) {
+      self.links.push(new KiliusLink(value));
+    });
+  };
+
+  /**
+   * Add a new link to the history table
+   * @param content {String} - The new shortened history link
+   */
+  self.addNewLink = function(content) {
+    // Add the new link to the beginning of the links array
+    self.links.unshift(new KiliusLink({
+      short: content,
+      long: self.newLink(),
+      hits: 0,
+      date: new Date()
+    }));
+
+    // Clear existing link
+    self.newLink('');
+
+    // Clear the error message
+    self.errorMsg('');
+
+    self.repositionCopyLinks();
+  };
+
+  // Initialization
 
   // Animation Events
   $('#banner').bind('webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd', function() {
@@ -245,36 +238,106 @@ function KiliusModel() {
     }
   });
 
+  // Register handler to reposition copy links whenever the window size changes
+  $(window).resize(self.repositionCopyLinks);
+
+  // Fetch the history for this user
+  kilius.comms.getUserHistory(self.user, self.addUserHistoryFromJSON);
+}
+
+function KiliusComms() {
+  var self = this;
+
+  // Observables
+  self.errorMsg = ko.observable('');
+
+  // Operations
+  /**
+   * Fetch the user history
+   * @param user - The user to fetch
+   * @param callback - Callback function
+   */
+  self.getUserHistory = function(user, callback) {
+    $.getJSON('/' + user + '/history', callback);
+  };
+
+  /**
+   * Post a new link to the server
+   * @param link {String} - The URL to post
+   * @param callback {function} - Success callback
+   */
+  self.postNewLink = function(link, callback) {
+    // AJAX call to POST new URL
+    $.ajax({
+      url: '/+/',
+      type: 'POST',
+      data: JSON.stringify({ url: link }),
+      contentType: 'application/json',
+      processData: false,
+
+      error: self.onLinkAddError,
+
+      success: function(data, textStatus, jqXHR) {
+        self.onLinkAddSuccess(jqXHR, callback);
+      }
+    });
+  };
+
+  /**
+   * AJAX error handler
+   * @param jqXHR {Object} - The jQuery AJAX object
+   * @param textStatus {String} - Status string
+   * @param errorThrown {String} - Error returned
+   */
+  self.onLinkAddError = function(jqXHR, textStatus, errorThrown) {
+    // Check if there is a message in the response text
+    var msg = (jqXHR.responseText ? JSON.parse(jqXHR.responseText) : null);
+
+    if (typeof msg === 'object') {
+      msg = msg.message;
+    }
+
+    // No message, create one
+    if (!msg) {
+      msg = ['The Kili.us server reported a problem: ',
+              textStatus ? textStatus[0].toUpperCase() + textStatus.slice(1) : 'Error',
+              ' - ',
+              errorThrown ? errorThrown : 'General Error'].join('');
+    }
+
+    // Set the error message
+    self.errorMsg(msg);
+  };
+
+  /**
+   * Callback on AJAX request success
+   * @param jqXHR {Object} - jQuery AJAX object
+   * @param callback {Function} - Supplied callback function
+   */
+  self.onLinkAddSuccess = function(jqXHR, callback) {
+    if (jqXHR.status === 201) {
+      callback(jqXHR.getResponseHeader('Location'));
+    } else {
+      // Expecting a 201 response
+      self.errorMsg('The server did not reply to the request in the correct format');
+    }
+  };
+
   // All AJAX communication uses JSON
   $.ajaxSetup({
     dataType: 'json'
-  });
+  })
+};
 
-  // Fetch the history for this user
-  $.getJSON('/' + self.user + '/history', function(json) {
-    var links = json.history || [];
-
-    // Ensure the links list is sorted by date
-    links.sort(function(a, b) {
-      a.date - b.date;
-    });
-
-    // Populate the links list
-    $.each(links, function(index, value) {
-      self.links.push(new KiliusLink(value));
-    });
-  });
-
-  // Register handler to reposition copy links whenever the window size changes
-  $(window).resize(self.repositionCopyLinks);
-}
+// Define the namespace for the project
+window.kilius = {};
 
 $(document).ready(function() {
-
   // Defer until the UI is completely set-up
   setTimeout(function() {
-    var kilius = new KiliusModel();
-    ko.applyBindings(kilius);
+    kilius.comms = new KiliusComms();
+    kilius.model = new KiliusModel();
+    ko.applyBindings(kilius.model);
 
     // Set ZeroClipboard's path
     ZeroClipboard.setMoviePath('/flash/ZeroClipboard.swf');

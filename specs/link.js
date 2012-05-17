@@ -2,7 +2,7 @@
  * KiliusLink object unit tests
  */
 
-describe('KiliusLink tests', function() {
+describe('working with a KiliusLink object', function() {
 
   var shortLink = 'kili.us/+/1',
       content = {
@@ -14,10 +14,16 @@ describe('KiliusLink tests', function() {
       link = {};
 
   beforeEach(function() {
+    this.addMatchers({
+      isWithinTenSeconds: function(expected) {
+        return Math.abs(this.actual - expected) < 10000;
+      }
+    });
+
     link = new KiliusLink(content);
   });
 
-  it('initialize from a constructor', function() {
+  it('should initialize from a constructor with provided content', function() {
     // Static data
     expect(link.shortLink).toEqual(content.short);
     expect(link.longLink).toEqual(content.long);
@@ -31,6 +37,23 @@ describe('KiliusLink tests', function() {
     // Computed
     expect(link.updatePosition()).toBe(false);
     expect(link.displayShortLink()).toEqual(shortLink);
+  });
+
+  it('should initialize from a constructor without provided content', function() {
+    // Static data
+    var blankLink = new KiliusLink();
+    expect(blankLink.shortLink).toEqual('');
+    expect(blankLink.longLink).toEqual('');
+    expect(blankLink.hits).toEqual(0);
+    expect(blankLink.date).isWithinTenSeconds(new Date());
+    expect(blankLink.clip).toBeNull();
+
+    // Observables
+    expect(blankLink.positionStale()).toBe(false);
+
+    // Computed
+    expect(blankLink.updatePosition()).toBe(false);
+    expect(blankLink.displayShortLink()).toEqual('');
   });
 
   it('throttles updating the position', function() {
