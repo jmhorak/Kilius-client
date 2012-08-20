@@ -35,46 +35,68 @@
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 
-<body>
+<body data-bind="css: { hasError: errorMsg().length > 0 }">
 
-  <div id="container">
+  <div id="container" class="">
     <header>
-      <h1 id="logo" class="blue" data-bind="css: {
-          blue: !animations.main.shown(),
-          black: animations.main.shown(),
-          'color-change': animations.enabled
-        }" >
-        <span id="bigK">K</span>
-          ili.us
+      <h1 class="base logo titleText" data-bind="css: {
+                 base: !animations.main.shown(),
+                 dark: animations.main.shown(),
+                 'color-change': animations.enabled
+               }">
+        <span id="bigK" class="accentText high-rise">K</span><span
+              class="low-rise logoText">ili.us</span>
       </h1>
-      <div id="userAddress"></div>
     </header>
-    <div id="main" role="main" class="transparent" data-bind="opacity: animations.main.shown(), css: { 'long-delay-fade': animations.enabled }">
-      <section class="err" data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
-      <form class="content" data-bind="submit: postLink">
-        <input type="url" data-bind="value: newLink" placeholder="Enter a URL" id="url-input" maxlength="2048">
-        <a href="#" class="siteBtn" id="submit-btn" data-bind="click: postLink">
+
+    <div id="mainBox" class="centered glossy lg-box backdrop transparent"
+         data-bind="opacity: animations.main.shown(),
+                    css: { 'long-delay-fade': animations.enabled }">
+
+      <form role="main" class="content centered well sm-box mid-rise transparent"
+            data-bind="opacity: animations.main.shown(),
+                       css: { 'long-delay-fade': animations.enabled },
+                       submit: postLink">
+
+        <section class="err err-well"
+                 data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
+
+        <input type="url"
+               class="rounded-left"
+               data-bind="value: newLink"
+               placeholder="Enter a URL"
+               id="url-input"
+               maxlength="2048">
+
+        <a href="#"
+           class="button contrast connected-btn rounded-right"
+           id="submit-btn"
+           data-bind="click: postLink">
           Shorten
         </a>
       </form>
-    </div>
-    <div class="banner-plus-table">
-      <div id="banner" class="transparent" data-bind="opacity: animations.main.shown(), css: { 'long-delay-fade': animations.enabled }"></div>
-      <div class='link-table-container fromTop' data-bind="opacity: animations.table.shown(), css: {
-           'slide': animations.enabled,
-           'immediate-fade': animations.enabled,
-           fromTop: !animations.table.shown(),
-           toBottom: animations.table.shown()
-        }">
-        <table summary="Links created by you" class='link-history-table hidden' data-bind="css: { hidden: !animations.table.shown() }">
+
+      <div class='table-container' data-bind="opacity: animations.table.shown(), css: {
+                 'slide': animations.enabled,
+                 'immediate-fade': animations.enabled,
+                 fromTop: !animations.table.shown(),
+                 toBottom: animations.table.shown()
+              }">
+        <table summary="Links created by you" class='centered sm-box data-table hidden'
+               data-bind="css: { hidden: !animations.table.shown() }">
           <thead class="table-header">
-          <tr>
-          <th class='copy-header' data-bind="visible: supportFlash">
-          <th class='short-link-header'>Short Link
-          <th class='long-link-header'>Link
-          <th class='hits-header right-align'>Hits
+            <tr>
+              <th class='copy-header' data-bind="visible: supportFlash">
+              <th class='short-link-header'>Short Link
+              <th class='long-link-header'>Link
+              <th class='hits-header right-align'>Hits
+            </tr>
+          </thead>
+          <tfoot>
+            <tr></tr>
+          </tfoot>
           <tbody class="link-history" data-bind="foreach: links, visible: links().length > 0">
-            <tr class="transparent" data-bind="opacity: $root.animations.rows.shown(), css: { 'short-delay-fade': $root.animations.enabled }">
+            <tr>
              <td data-bind="visible: $root.supportFlash">
                 <div class="copy-cell" data-bind="copyElement: updatePosition()">Copy</div>
              </td>
@@ -90,8 +112,8 @@
         </table>
        </div>
     </div>
-    <footer>
-      <div class="copyright">
+    <footer class="bottom">
+      <div class="copyright shadowed-text">
         Made by <a class="siteBtn" id="blogLink" href="http://jeffhorak.com">Jeff Horak</a> in 2012
       </div>
     </footer>

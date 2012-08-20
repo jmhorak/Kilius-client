@@ -111,7 +111,8 @@ function KiliusLink(content) {
  * @constructor
  */
 function KiliusModel() {
-  var self = this;
+  var self = this,
+      animationEndEvents = 'webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd';
 
   // Static
   self.user = 'k'; // TODO: Use a real user
@@ -145,8 +146,7 @@ function KiliusModel() {
   self.animations = {
     ready: ko.observable(true),
     main:  { play: ko.observable(true) },
-    table: { play: ko.observable(false) },
-    rows: { play: ko.observable(false) }
+    table: { play: ko.observable(false) }
   };
 
   // Computed animation properties
@@ -162,9 +162,11 @@ function KiliusModel() {
     return !self.supportAnimation || self.animations.table.play();
   });
 
-  self.animations.rows.shown = ko.computed(function() {
-    return !self.supportAnimation || self.animations.rows.play();
-  });
+  self.playTableAnimation = function() {
+    if (self.links().length > 0 && !self.animations.table.shown()) {
+      self.animations.table.play(true);
+    }
+  }
 
   // Operations
   /**
@@ -199,6 +201,8 @@ function KiliusModel() {
     $.each(links, function(index, value) {
       self.links.push(new KiliusLink(value));
     });
+
+    self.playTableAnimation();
   };
 
   /**
@@ -220,21 +224,17 @@ function KiliusModel() {
     // Clear the error message
     self.errorMsg('');
 
+    self.playTableAnimation();
     self.repositionCopyLinks();
   };
 
   // Initialization
 
   // Animation Events
-  $('#banner').bind('webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd', function() {
-    self.animations.table.play(true);
-  });
-  $('.link-table-container').bind('webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd', function(evt) {
+  $('#mainBox').bind(animationEndEvents, function(evt) {
     if (evt.target === this) {
-      self.animations.rows.play(true);
-
-      // Create and overlay Flash copy movie
-      self.repositionCopyLinks();
+      self.playTableAnimation();
+      $('#bigK').addClass('softenDark');
     }
   });
 
