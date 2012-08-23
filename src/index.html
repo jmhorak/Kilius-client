@@ -24,7 +24,7 @@
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
   <link rel="stylesheet" href="css/style.css">
-   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <!-- end CSS-->
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
@@ -82,14 +82,14 @@
                  fromTop: !animations.table.shown(),
                  toBottom: animations.table.shown()
               }">
-        <table summary="Links created by you" class='centered sm-box data-table hidden'
+        <table summary="Links created by you" class='centered sm-box data-table link-table hidden'
                data-bind="css: { hidden: !animations.table.shown() }">
           <thead class="table-header">
             <tr>
               <th class='copy-header' data-bind="visible: supportFlash">
               <th class='short-link-header'>Short Link
               <th class='long-link-header'>Link
-              <th class='hits-header right-align'>Hits
+              <th class='hits-header numeric'>Hits
             </tr>
           </thead>
           <tfoot>
@@ -98,15 +98,17 @@
           <tbody class="link-history" data-bind="foreach: links, visible: links().length > 0">
             <tr>
              <td data-bind="visible: $root.supportFlash">
-                <div class="copy-cell" data-bind="copyElement: updatePosition()">Copy</div>
+                <div class="copy-cell" data-bind="copyElement: updatePosition()">
+                  <i class="icon-copy"></i>
+                </div>
              </td>
              <td class="short-link-cell">
-                <a class="table-link" data-bind="attr: { href: shortLink }, text: displayShortLink"></a>
+                <a class="link" data-bind="attr: { href: shortLink }, text: displayShortLink"></a>
              </td>
              <td>
-                <a class="table-link" data-bind="attr: { href: longLink }, text: longLink"></a>
+                <a class="link" data-bind="attr: { href: longLink }, text: longLink"></a>
              </td>
-             <td class="right-align" data-bind="text: hits"></td>
+             <td class="hits-cell numeric" data-bind="text: hits"></td>
             </tr>
           </tbody>
         </table>

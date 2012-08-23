@@ -134,7 +134,7 @@ ZeroClipboard.Client.prototype = {
 			}
 		}
 		
-		style.backgroundColor = '#f00'; // debug
+		//style.backgroundColor = '#f00'; // debug
 		
 		appendElem.appendChild(this.div);
 		

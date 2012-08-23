@@ -205,6 +205,25 @@ input:invalid, textarea:invalid { background-color: #f0dddd; }
 table { border-collapse: collapse; border-spacing: 0; }
 td { vertical-align: top; }
 
+/* =============================================================================
+   Stripped down font-awesome styles
+   ========================================================================== */
+@font-face {
+  font-family: "FontAwesome";
+  src: url('../font/fontawesome-webfont.eot');
+  src: url('../font/fontawesome-webfont.eot?#iefix') format('eot'), url('../font/fontawesome-webfont.woff') format('woff'), url('../font/fontawesome-webfont.ttf') format('truetype'), url('../font/fontawesome-webfont.svg#FontAwesome') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  unicode-range: U+f0c5; /* Only need a single icon */
+}
+
+.icon-copy::before {
+  content: "\f0c5";
+  vertical-align: top;
+  font: normal normal normal 1.3333333333333333em FontAwesome;
+  display: inline-block;
+  text-decoration: inherit;
+}
 
 /* ==== primary styles =====================================================
    Author: Jeff Horak
@@ -267,6 +286,9 @@ $comp: #C18D48;
 $darkerComp: #A5783E;
 $lighterComp: #E0B377;
 
+$link: #5397C7;
+$linkHover: #DCE3F3;
+
 /* Error Colors */
 $error: #DC3625;
 $errorAccent: #7C1308;
@@ -275,11 +297,12 @@ $errorAccent: #7C1308;
 $gray: #3D3D3D;
 $lightGray: #656565;
 $darkGray: #353535;
+$lighterGray: #454545;
 
 /* Shadows */
 $shadow: gray;
-$darkShadow: #454545;
-$lightShadow: #666;
+$darkShadow: rgba(69, 69, 69, 0.7);
+$lightShadow: rgba(102, 102, 102, 0.7);
 
 html, body {
   height: 100%;
@@ -303,7 +326,7 @@ body {
 }
 
 .softenDark {
-  color: ligthen($dark, 15%);
+  color: lighten($dark, 2%);
   text-shadow: -3px -3px 4px $darkShadow, 1px 1px 4px $lightShadow;
 }
 
@@ -315,7 +338,7 @@ body {
   position: relative;
   margin: 0 auto;
   top: 0.45em;
-  left: -2em;
+  left: 10%;
 
   #bigK {
     position: relative;
@@ -330,11 +353,10 @@ body {
 .titleText {
   font-size: 6.0em;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
 
   .accentText {
     font-size: 1.54em;
-
   }
 
   .badge {
@@ -372,13 +394,14 @@ body {
 .content  {
   position: relative;
   max-width: 500px;
-  width: 85%;
+  width: 72.25%; /* 0.85 * 0.85 */
   border-radius: 20px / 12px;
 
   input {
-    width: 70%;
+    width: 50.575%; /* 0.85 * 0.85 * 0.7 */
     max-width: 300px;
     padding: 10px 15px;
+    margin-left: 20px;
 
     & + .connected-btn {
       left: -4px;
@@ -436,7 +459,7 @@ body {
 .table-container {
   position: relative;
   margin: 1em auto;
-  max-width: 600px;
+  width: 95%;
 }
 
 .data-table {
@@ -446,6 +469,75 @@ body {
 
   tfoot tr {
     height: 5px;
+  }
+
+  .table-header {
+    font-size: 0.8em;
+    color: $base;
+    text-shadow: 1px 1px $darker;
+  }
+
+  th {
+    text-align: left;
+    padding: 3px 5px;
+  }
+
+  tbody {
+    font-size: 0.75em;
+    background-color: $lighterGray;
+  }
+
+  td {
+    padding: 3px 5px;
+    color: gray;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .numeric {
+    text-align: right;
+  }
+}
+
+.link-table {
+
+  .copy-header {
+    width: 8%;
+  }
+
+  .short-link-header {
+    width: 25%;
+  }
+
+  .long-link-header {
+    width: 60%;
+  }
+
+  .hits-header {
+    width: 2em;
+  }
+
+  .copy-cell {
+    text-align: center;
+
+    i {
+      @include transition(color, 150ms, ease-out);
+    }
+
+    &.hover i {
+      color: $linkHover;
+    }
+  }
+
+  .link {
+     color: $link;
+     text-decoration: none;
+
+    &:hover {
+       color: $linkHover;
+       text-decoration: underline;
+    }
   }
 }
 
@@ -459,6 +551,45 @@ body {
   padding: 0.3em;
   line-height: 1.5em;
   margin-bottom: 10px;
+}
+
+.fromTop {
+   top: -8em;
+}
+
+.toBottom {
+   top: 0;
+}
+
+footer {
+  font-size: 1em;
+  color: $gray;
+  text-align: center;
+  padding-bottom: 10px;
+  width: 100%;
+
+  a {
+    border-bottom: 1px dotted;
+    color: $base;
+    text-decoration: none;
+
+    &:visited {
+      color: $base;
+    }
+
+    &:hover {
+      color: $linkHover;
+    }
+  }
+}
+
+.shadowed-text {
+  text-shadow: 1px 1px 1px $dark;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
 }
 
 .rounded-left {
@@ -497,112 +628,6 @@ body {
    opacity: 0;
 }
 
-.fromTop {
-   top: -8em;
-}
-
-.toBottom {
-   top: 0;
-}
-
-th {
-   text-align: left;
-   padding: 3px 5px;
-}
-
-.copy-header {
-   width: 8%;
-}
-
-.short-link-header {
-   width: 18%;
-}
-
-.long-link-header {
-   width: 60%;
-}
-
-.hits-header {
-   width: 6%;
-}
-
-.right-align {
-   text-align: right;
-}
-
-.table-header {
-   font: 0.8em sans-serif;
-   color: #1F608D;
-   text-shadow: 1px 1px #101010;
-}
-
-.link-history {
-   font-size: 0.75em;
-   background-color: #454545;
-}
-
-.copy-cell {
-   position: relative;
-}
-
-tr.new {
-   background-color: #555;
-}
-
-td {
-   padding: 3px 5px;
-   color: gray;
-}
-
-.short-link-cell {
-   text-overflow: ellipsis;
-}
-
-.long-link-cell {
-   text-overflow: ellipsis;
-}
-
-a.table-link {
-   color: #5397C7;
-   text-decoration: none;
-
-  &:hover {
-     color: #5C1611;
-     text-decoration: underline;
-  }
-}
-
-footer {
-  font-size: 1em;
-  color: $gray;
-  text-align: center;
-  padding-bottom: 10px;
-  width: 100%;
-
-  a {
-    border-bottom: 1px dotted;
-    color: $base;
-    text-decoration: none;
-
-    &:visited {
-      color: $base;
-    }
-
-    &:hover {
-      color: #6C8CD5;
-    }
-  }
-}
-
-.shadowed-text {
-  text-shadow: 1px 1px 1px $dark;
-}
-
-.bottom {
-  position: absolute;
-  bottom: 0;
-}
-
 
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.
@@ -637,17 +662,20 @@ footer {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (min-width: 480px) {
-  /* Style adjustments for viewports 480px and over go here */
-
+@media only screen and (min-width: 600px) {
+  .logo {
+    text-align: center;
+    left: -1.4em;
+  }
 }
 
-@media only screen and (min-width: 768px) {
-  /* Style adjustments for viewports 768px and over go here */
-
+@media only screen and (min-width: 676px) {
+  /* Style adjustments for viewports 676 and over go here */
+  .logo {
+    text-align: center;
+    left: -1.6em;
+  }
 }
-
-
 
 /* ==|== print styles =======================================================
    Print styles.
