@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     // the staging directory used during the process
     staging: 'intermediate',
     // final build output
-    output: 'publish',
+    output: '../publish',
 
     // Create the build dirs
     mkdirs: {

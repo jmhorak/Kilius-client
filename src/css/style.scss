@@ -513,21 +513,6 @@ footer {
    opacity: 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -635,8 +620,19 @@ footer {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
-    /* Style adjustments for viewports that meet the condition */
+@media only screen and (min-width: 600px) {
+  .logo {
+    text-align: center;
+    left: -1.4em;
+  }
+}
+
+@media only screen and (min-width: 676px) {
+  /* Style adjustments for viewports 676 and over go here */
+  .logo {
+    text-align: center;
+    left: -1.6em;
+  }
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
