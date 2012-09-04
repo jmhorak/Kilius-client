@@ -1,0 +1,11 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Jeff Horak -- Author -- @jmhorak
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3, Flash
+    jQuery, Modernizr, promise.js
