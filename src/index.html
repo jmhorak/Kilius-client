@@ -15,6 +15,7 @@
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
   <script src="js/vendor/modernizr-2.6.1.min.js"></script>
 </head>
 <body data-bind="css: { hasError: errorMsg().length > 0 }">
@@ -50,7 +51,7 @@
                data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
 
       <input type="url"
-             class="rounded-left"
+             class="rounded-left connected-input"
              data-bind="value: newLink"
              placeholder="Enter a URL"
              id="url-input"
@@ -116,7 +117,6 @@
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
 
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 <script>
   var _gaq = [
     ['_setAccount', 'UA-XXXXX-X'],

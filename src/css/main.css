@@ -126,6 +126,9 @@ body {
   -o-transition: background-position 500ms ease-out 0;
   transition: background-position 500ms ease-out 0; }
 
+#container header {
+  width: 90%; }
+
 .hasError {
   background-position: 0 70%; }
 
@@ -141,19 +144,17 @@ body {
 
 .logo {
   position: relative;
-  margin: 0 auto;
-  top: 0.45em;
-  left: 10%; }
+  margin: 0 auto; }
   .logo #bigK {
     position: relative;
-    top: 0.37em; }
+    top: 0.17em; }
   .logo .logoText {
     position: relative; }
 
 .titleText {
-  font-size: 6.0em;
-  font-weight: bold;
-  text-align: left; }
+  font-size: 3.0em;
+  font-weight: 700;
+  text-align: center; }
   .titleText .accentText {
     font-size: 1.54em; }
 
@@ -176,7 +177,7 @@ body {
 .backdrop {
   max-width: 700px;
   width: 85%;
-  padding: 5.5em 0 5px; }
+  padding: 3.2em 0 5px; }
 
 .content {
   position: relative;
@@ -188,12 +189,16 @@ body {
     width: 50.575%;
     /* 0.85 * 0.85 * 0.7 */
     max-width: 300px;
-    padding: 10px 15px;
-    margin-left: 20px; }
+    padding: 11px 15px; }
     .content input + .connected-btn {
       left: -4px;
-      top: 2px;
       position: relative; }
+  .content .connected-input {
+    border: 2px solid #0095ff;
+    border-right: none; }
+  .content .connected-btn {
+    border: 2px solid #0095ff;
+    border-left: none; }
 
 #mainBox {
   position: relative;
@@ -213,7 +218,7 @@ body {
   background-image: -ms-linear-gradient(bottom, #1f5f8d, #3c80b0);
   background-image: -o-linear-gradient(bottom, #1f5f8d, #3c80b0);
   background-image: linear-gradient(to bottom, #1f5f8d, #3c80b0);
-  padding: 50px;
+  padding: 30px;
   text-align: center;
   border: solid 3px #3c80b0; }
 
@@ -247,7 +252,7 @@ body {
 
 .button {
   font-size: 15px;
-  padding: 9px 15px 10px;
+  padding: 12px 15px 11px;
   text-decoration: none; }
 
 .table-container {
@@ -281,13 +286,12 @@ body {
     text-align: right; }
 
 .link-table .copy-header {
-  width: 8%; }
+  width: 1em; }
 .link-table .short-link-header {
-  width: 25%; }
-.link-table .long-link-header {
-  width: 60%; }
+  width: 125px; }
 .link-table .hits-header {
-  width: 2em; }
+  width: 2.1em;
+  display: none; }
 .link-table .copy-cell {
   text-align: center; }
   .link-table .copy-cell i {
@@ -298,6 +302,8 @@ body {
     transition: color 150ms ease-out 0; }
   .link-table .copy-cell.hover i {
     color: #dce3f3; }
+.link-table .hits-cell {
+  display: none; }
 .link-table .link {
   color: #5397c7;
   text-decoration: none; }
@@ -486,12 +492,34 @@ footer {
 @media only screen and (min-width: 600px) {
   .logo {
     text-align: center;
-    left: -1.4em; } }
+    left: -1.4em;
+    top: 0.58em;
+    left: 10%; }
+    .logo #bigK {
+      top: 0.37em; }
+
+  .titleText {
+    font-size: 6.0em;
+    text-align: left; }
+
+  .backdrop {
+    padding: 5.5em 0 5px; }
+
+  .well {
+    padding: 50px; }
+
+  .content input {
+    margin-left: 20px; }
+
+  .link-table .hits-header {
+    display: table-cell; }
+  .link-table .hits-cell {
+    display: table-cell; } }
 @media only screen and (min-width: 676px) {
   /* Style adjustments for viewports 676 and over go here */
   .logo {
     text-align: center;
-    left: -1.6em; } }
+    left: -1.2em; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   /* Style adjustments for high resolution devices */ }
 /* ==========================================================================
