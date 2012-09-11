@@ -88,7 +88,6 @@ textarea {
 
 .icon-copy::before {
   content: "\f0c5";
-  vertical-align: top;
   font: normal normal normal 1.3333333333333333em FontAwesome;
   display: inline-block;
   text-decoration: inherit; }
@@ -177,7 +176,7 @@ body {
 .backdrop {
   max-width: 700px;
   width: 85%;
-  padding: 3.2em 0 5px; }
+  padding: 3.4em 0 5px; }
 
 .content {
   position: relative;
@@ -489,18 +488,22 @@ footer {
    Theses examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
+@media only screen and (min-width: 525px) {
+  .titleText {
+    font-size: 3.8em; }
+
+  .backdrop {
+    padding-top: 2.9em; } }
 @media only screen and (min-width: 600px) {
   .logo {
     text-align: center;
-    left: -1.4em;
-    top: 0.58em;
-    left: 10%; }
+    left: -0.6em;
+    top: 0.58em; }
     .logo #bigK {
       top: 0.37em; }
 
   .titleText {
-    font-size: 6.0em;
-    text-align: left; }
+    font-size: 6.0em; }
 
   .backdrop {
     padding: 5.5em 0 5px; }
@@ -515,11 +518,10 @@ footer {
     display: table-cell; }
   .link-table .hits-cell {
     display: table-cell; } }
-@media only screen and (min-width: 676px) {
+@media only screen and (min-width: 725px) {
   /* Style adjustments for viewports 676 and over go here */
   .logo {
-    text-align: center;
-    left: -1.2em; } }
+    left: -0.725em; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   /* Style adjustments for high resolution devices */ }
 /* ==========================================================================

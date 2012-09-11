@@ -105,7 +105,6 @@ textarea {
 
 .icon-copy::before {
   content: "\f0c5";
-  vertical-align: top;
   font: normal normal normal 1.3333333333333333em FontAwesome;
   display: inline-block;
   text-decoration: inherit;
@@ -274,7 +273,7 @@ body {
 .backdrop {
   max-width: 700px;
   width: 85%;
-  padding: 3.2em 0 5px;
+  padding: 3.4em 0 5px;
 }
 
 .content  {
@@ -634,12 +633,21 @@ footer {
    Modify as content requires.
    ========================================================================== */
 
+@media only screen and (min-width: 525px) {
+  .titleText {
+    font-size: 3.8em;
+  }
+
+  .backdrop {
+    padding-top: 2.9em;
+  }
+}
+
 @media only screen and (min-width: 600px) {
   .logo {
     text-align: center;
-    left: -1.4em;
+    left: -0.6em;
     top: 0.58em;
-    left: 10%;
 
     #bigK {
       top: 0.37em;
@@ -648,7 +656,6 @@ footer {
 
   .titleText {
     font-size: 6.0em;
-    text-align: left;
   }
 
   .backdrop {
@@ -676,11 +683,10 @@ footer {
   }
 }
 
-@media only screen and (min-width: 676px) {
+@media only screen and (min-width: 725px) {
   /* Style adjustments for viewports 676 and over go here */
   .logo {
-    text-align: center;
-    left: -1.2em;
+    left: -0.725em;
   }
 }
 
