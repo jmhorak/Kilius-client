@@ -29,9 +29,11 @@ ko.bindingHandlers.opacity = {
    */
   update: function(element, valueAccessor) {
     if (valueAccessor()) {
-      $(element).removeClass('transparent').addClass('opaque');
+      element.className = element.className.replace('transparent', 'opaque');
+      //$(element).removeClass('transparent').addClass('opaque');
     } else {
-      $(element).removeClass('opaque').addClass('transparent');
+      element.className = element.className.replace('opaque', 'transparent');
+      //$(element).removeClass('opaque').addClass('transparent');
     }
   }
 };
@@ -86,10 +88,10 @@ function KiliusLink(content) {
   content = content || {};
 
   // Static content
-  self.shortLink = content.short || '';
-  self.longLink = content.long || '';
-  self.hits = content.hits || 0;
-  self.date = content.date || new Date();
+  self.shortLink = content.shortLink || '';
+  self.longLink = content.longLink || '';
+  self.hits = content.hits.length || 0;
+  self.date = content.createDate || new Date();
   self.clip = null;
 
   // Observables
@@ -112,7 +114,10 @@ function KiliusLink(content) {
  */
 function KiliusModel() {
   var self = this,
-      animationEndEvents = 'webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd';
+      animationEndEvents = 'webkitTransitionEnd transitionend MSTransitionEnd oTransitionEnd',
+      animatedLogo = new Promise(),
+      animatedTable = new Promise(),
+      historyFetched = new Promise();
 
   // Static
   self.user = 'k'; // TODO: Use a real user
@@ -129,9 +134,29 @@ function KiliusModel() {
 
   // Observables
   self.links = ko.observableArray([]);
-  self.newLink = ko.observable();
+  self.link = ko.observable();
 
   // Computed
+  self.newLink = ko.computed(function() {
+    var link = self.link();
+
+    // Look to see if it at all resembles a URL
+    if (/.*\..*/.test(link)) {
+      // Look for a protocol, if none present, use http
+      if (!/.*:.*/.test(link)) {
+       link = 'http://' + link;
+      }
+    }
+
+    return link;
+  });
+
+  // Are there any links defined?
+  self.hasLinks = ko.computed(function() {
+    return self.links().length > 0;
+  });
+
+  // Show/hide error messages
   self.errorMsg = ko.computed({
     read: function() {
       return kilius.comms.errorMsg()
@@ -143,28 +168,51 @@ function KiliusModel() {
   });
 
   // Animations
-  self.animations = {
-    ready: ko.observable(true),
-    main:  { play: ko.observable(true) },
-    table: { play: ko.observable(false) }
-  };
+  self.animated = {
+    logo: ko.observable(false),
+    table: ko.observable(false),
+    links: ko.observable(false)
+  }
 
-  // Computed animation properties
-  self.animations.enabled = ko.computed(function() {
-    return self.supportAnimation && self.animations.ready();
+  // Promise for when the logo finishes animating
+  animatedLogo.whenDone(function() {
+    var element;
+
+    self.animated.table(true);
+
+    // Start the table animation
+    historyFetched.whenDone(self.showTable);
   });
 
-  self.animations.main.shown = ko.computed(function() {
-    return !self.supportAnimation || self.animations.main.play();
+  // Promise for when the table finishes animating
+  animatedTable.whenDone(function() {
+    self.animated.links(true);
+    self.repositionCopyLinks();
   });
 
-  self.animations.table.shown = ko.computed(function() {
-    return !self.supportAnimation || self.animations.table.play();
+  // Animation Events
+  $('#mainBox').bind(animationEndEvents, function(evt) {
+    if (evt.target === this) {
+      animatedLogo.resolve();
+    }
   });
 
-  self.playTableAnimation = function() {
-    if (self.links().length > 0 && !self.animations.table.shown()) {
-      self.animations.table.play(true);
+  $('.table-container').bind(animationEndEvents, function(evt) {
+    if (evt.target === this) {
+      animatedTable.resolve();
+    }
+  });
+
+  // If animation is not supported, just immediately resolve
+  if (!self.supportAnimation) {
+    animatedLogo.resolve();
+    animatedTable.resolve();
+  }
+
+  self.showTable = function() {
+    if (self.hasLinks()) {
+      element = $('.table-container')[0];
+      element.className = element.className.replace('fromTop', 'toBottom');
     }
   }
 
@@ -173,7 +221,9 @@ function KiliusModel() {
    * Post a link to the server
    */
   self.postLink = function() {
-    kilius.comms.postNewLink(self.newLink(), self.addNewLink);
+    kilius.comms.postNewLink(self.newLink()).then(self.addNewLink, function(msg) {
+      self.errorMsg(msg);
+    });
   };
 
   /**
@@ -194,7 +244,7 @@ function KiliusModel() {
 
     // Ensure the links list is sorted by date
     links.sort(function(a, b) {
-      return b.date - a.date;
+      return b.createDate - a.createDate;
     });
 
     // Populate the links list
@@ -202,7 +252,7 @@ function KiliusModel() {
       self.links.push(new KiliusLink(value));
     });
 
-    self.playTableAnimation();
+    historyFetched.resolve();
   };
 
   /**
@@ -212,37 +262,30 @@ function KiliusModel() {
   self.addNewLink = function(content) {
     // Add the new link to the beginning of the links array
     self.links.unshift(new KiliusLink({
-      short: content,
-      long: self.newLink(),
+      shortLink: content,
+      longLink: self.newLink(),
       hits: 0,
-      date: new Date()
+      createDate: new Date()
     }));
 
     // Clear existing link
-    self.newLink('');
+    self.link('');
 
     // Clear the error message
     self.errorMsg('');
 
-    self.playTableAnimation();
+    self.showTable();
     self.repositionCopyLinks();
   };
 
   // Initialization
-
-  // Animation Events
-  $('#mainBox').bind(animationEndEvents, function(evt) {
-    if (evt.target === this) {
-      self.playTableAnimation();
-      $('#bigK').addClass('softenDark');
-    }
-  });
-
   // Register handler to reposition copy links whenever the window size changes
   $(window).resize(self.repositionCopyLinks);
 
-  // Fetch the history for this user
-  kilius.comms.getUserHistory(self.user, self.addUserHistoryFromJSON);
+  // Fetch the history for this user then add it to the table
+  kilius.comms.getUserHistory(self.user).then(self.addUserHistoryFromJSON);
+
+  self.animated.logo(true);
 }
 
 function KiliusComms() {
@@ -255,18 +298,26 @@ function KiliusComms() {
   /**
    * Fetch the user history
    * @param user - The user to fetch
-   * @param callback - Callback function
+   *
+   * @return Promise
    */
-  self.getUserHistory = function(user, callback) {
-    $.getJSON('/' + user + '/history', callback);
+  self.getUserHistory = function(user) {
+    var getHistory = new Promise();
+    $.getJSON('/' + user + '/history', function(json) {
+      getHistory.resolve(json);
+    });
+
+    return getHistory;
   };
 
   /**
    * Post a new link to the server
    * @param link {String} - The URL to post
-   * @param callback {function} - Success callback
    */
-  self.postNewLink = function(link, callback) {
+  self.postNewLink = function(link) {
+
+    var newLink = new Promise();
+
     // AJAX call to POST new URL
     $.ajax({
       url: '/+/',
@@ -275,55 +326,53 @@ function KiliusComms() {
       contentType: 'application/json',
       processData: false,
 
-      error: self.onLinkAddError,
+      /**
+       * AJAX error handler
+       * @param jqXHR {Object} - The jQuery AJAX object
+       * @param textStatus {String} - Status string
+       * @param errorThrown {String} - Error returned
+       */
+      error: function(jqXHR, textStatus, errorThrown) {
+        // Check if there is a message in the response text
+        var msg = null;
 
+        try {
+          msg = JSON.parse(jqXHR.responseText);
+          msg = msg.message;
+        } catch (e) {
+          msg = null;
+        }
+
+        // No message, create one
+        if (!msg) {
+          msg = ['The Kili.us server reported a problem: ',
+                  textStatus ? textStatus[0].toUpperCase() + textStatus.slice(1) : 'Error',
+                  ' - ',
+                  errorThrown ? errorThrown : 'General Error'].join('');
+        }
+
+        // Set the error message
+        newLink.reject(msg);
+
+
+        self.errorMsg(msg);
+      },
+
+      /**
+       * Callback on AJAX request success
+       * @param jqXHR {Object} - jQuery AJAX object
+       */
       success: function(data, textStatus, jqXHR) {
-        self.onLinkAddSuccess(jqXHR, callback);
+        if (jqXHR.status === 201) {
+          newLink.resolve(jqXHR.getResponseHeader('Location'));
+        } else {
+          // Expecting a 201 response
+          newLink.reject('The server did not reply to the request in the correct format');
+        }
       }
     });
-  };
 
-  /**
-   * AJAX error handler
-   * @param jqXHR {Object} - The jQuery AJAX object
-   * @param textStatus {String} - Status string
-   * @param errorThrown {String} - Error returned
-   */
-  self.onLinkAddError = function(jqXHR, textStatus, errorThrown) {
-    // Check if there is a message in the response text
-    var msg = null;
-
-    try {
-      msg = JSON.parse(jqXHR.responseText);
-      msg = msg.message;
-    } catch (e) {
-      msg = null;
-    }
-
-    // No message, create one
-    if (!msg) {
-      msg = ['The Kili.us server reported a problem: ',
-              textStatus ? textStatus[0].toUpperCase() + textStatus.slice(1) : 'Error',
-              ' - ',
-              errorThrown ? errorThrown : 'General Error'].join('');
-    }
-
-    // Set the error message
-    self.errorMsg(msg);
-  };
-
-  /**
-   * Callback on AJAX request success
-   * @param jqXHR {Object} - jQuery AJAX object
-   * @param callback {Function} - Supplied callback function
-   */
-  self.onLinkAddSuccess = function(jqXHR, callback) {
-    if (jqXHR.status === 201) {
-      callback(jqXHR.getResponseHeader('Location'));
-    } else {
-      // Expecting a 201 response
-      self.errorMsg('The server did not reply to the request in the correct format');
-    }
+    return newLink;
   };
 
   // All AJAX communication uses JSON
