@@ -6,10 +6,10 @@ describe('working with a KiliusLink object', function() {
 
   var shortLink = 'kili.us/+/1',
       content = {
-        short: 'http://' + shortLink,
-        long: 'https://github.com/jmhorak',
-        hits: 120,
-        date: new Date()
+        shortLink: 'http://' + shortLink,
+        longLink: 'https://github.com/jmhorak',
+        hits: new Array(120),
+        createDate: new Date()
       },
       link = {};
 
@@ -25,10 +25,10 @@ describe('working with a KiliusLink object', function() {
 
   it('should initialize from a constructor with provided content', function() {
     // Static data
-    expect(link.shortLink).toEqual(content.short);
-    expect(link.longLink).toEqual(content.long);
-    expect(link.hits).toEqual(content.hits);
-    expect(link.date).toEqual(content.date);
+    expect(link.shortLink).toEqual(content.shortLink);
+    expect(link.longLink).toEqual(content.longLink);
+    expect(link.hits).toEqual(content.hits.length);
+    expect(link.date).toEqual(content.createDate);
     expect(link.clip).toBeNull();
 
     // Observables

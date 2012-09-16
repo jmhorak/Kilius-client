@@ -118,15 +118,14 @@ body {
   background-image: -o-linear-gradient(top, #202020, #202020 50%, #dc3625);
   background-image: linear-gradient(to bottom, #dc3625, #202020 50%, #202020);
   background-position: 0 0;
+  background-attachment: fixed;
+  /* Don't allow the background to scroll */
   background-size: 100% 200%;
   -webkit-transition: background-position 500ms ease-out 0;
   -moz-transition: background-position 500ms ease-out 0;
   -ms-transition: background-position 500ms ease-out 0;
   -o-transition: background-position 500ms ease-out 0;
   transition: background-position 500ms ease-out 0; }
-
-#container header {
-  width: 90%; }
 
 .hasError {
   background-position: 0 70%; }
@@ -146,9 +145,11 @@ body {
   margin: 0 auto; }
   .logo #bigK {
     position: relative;
-    top: 0.17em; }
+    top: 0.17em;
+    font-style: italic; }
   .logo .logoText {
-    position: relative; }
+    position: relative;
+    margin-left: 6px; }
 
 .titleText {
   font-size: 3.0em;
@@ -231,6 +232,8 @@ body {
   background-image: -o-linear-gradient(top, #e0b377, #c18d48 60%, #a5783e);
   background-image: linear-gradient(to bottom, #a5783e, #c18d48 60%, #e0b377);
   background-position: 0 100%;
+  background-attachment: fixed;
+  /* Don't allow the background to scroll */
   background-size: 100% 200%;
   -webkit-transition: background-position 100ms ease-out 0;
   -moz-transition: background-position 100ms ease-out 0;
@@ -330,7 +333,6 @@ footer {
   font-size: 1em;
   color: #3d3d3d;
   text-align: center;
-  padding-bottom: 10px;
   width: 100%; }
   footer a {
     border-bottom: 1px dotted;
@@ -340,12 +342,18 @@ footer {
       color: #1f5f8d; }
     footer a:hover {
       color: #dce3f3; }
+  footer .copyright {
+    padding-bottom: 10px;
+    max-width: 700px;
+    width: 85%;
+    background-color: rgba(32, 32, 32, 0.9);
+    margin: 0 auto; }
 
 .shadowed-text {
-  text-shadow: 1px 1px 1px #202020; }
+  text-shadow: 0 0 1px rgba(102, 102, 102, 0.7); }
 
 .bottom {
-  position: absolute;
+  position: fixed;
   bottom: 0; }
 
 .rounded-left {
@@ -493,14 +501,19 @@ footer {
     font-size: 3.8em; }
 
   .backdrop {
-    padding-top: 2.9em; } }
+    padding-top: 2.9em; }
+
+  .logoText {
+    margin-left: 10px; } }
 @media only screen and (min-width: 600px) {
   .logo {
     text-align: center;
-    left: -0.6em;
+    left: -0.9em;
     top: 0.58em; }
     .logo #bigK {
       top: 0.37em; }
+    .logo .logoText {
+      margin-left: 20px; }
 
   .titleText {
     font-size: 6.0em; }
@@ -521,7 +534,7 @@ footer {
 @media only screen and (min-width: 725px) {
   /* Style adjustments for viewports 676 and over go here */
   .logo {
-    left: -0.725em; } }
+    left: -1.2em; } }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   /* Style adjustments for high resolution devices */ }
 /* ==========================================================================

@@ -15,11 +15,11 @@ describe('creating the model', function() {
   // Initialize the model from the constructor, check initial state
   it('should initialize from a constructor', function() {
     kilius.comms = {
-      getUserHistory: function() { return true; },
+      getUserHistory: function() { return new Promise(); },
       errorMsg: function() { return ''; }
     };
 
-    spyOn(kilius.comms, 'getUserHistory');
+    spyOn(kilius.comms, 'getUserHistory').andReturn( new Promise() );
 
     var model = new KiliusModel();
 
@@ -36,19 +36,14 @@ describe('creating the model', function() {
     expect(model.errorMsg()).toEqual('');
 
     // Animations
-    expect(model.animations.ready()).toBe(true);
-    expect(model.animations.enabled()).toBeDefinedAndNotNull();
-    // main
-    expect(model.animations.main.play()).toBe(true);
-    expect(model.animations.main.shown()).toBeDefinedAndNotNull();
+    // Logo
+    expect(model.animated.logo()).toBe(true);
     // table
-    expect(model.animations.table.play()).toBe(false);
-    expect(model.animations.table.shown()).toBe(false);
-    // rows
-    expect(model.animations.rows.play()).toBe(false);
-    expect(model.animations.rows.shown()).toBe(false);
+    expect(model.animated.table()).toBe(false);
+    // links
+    expect(model.animated.links()).toBe(false);
 
-    expect(kilius.comms.getUserHistory).toHaveBeenCalledWith(model.user, model.addUserHistoryFromJSON);
+    expect(kilius.comms.getUserHistory).toHaveBeenCalledWith(model.user);
   });
 });
 
@@ -58,31 +53,33 @@ describe('animating the app', function() {
   var model = {};
 
   beforeEach(function() {
-    jasmine.getFixtures().set('<div id="banner"></div><div class="link-table-container"></div>');
+    jasmine.getFixtures().set('<div id="mainBox"></div><div class="table-container"></div>');
     model = new KiliusModel();
   });
 
   it('should play through all the animations', function() {
     // Only run these tests if animation is supported
-    expect(model.animations.main.play()).toBe(true);
-    expect(model.animations.table.play()).toBe(false);
-    expect(model.animations.rows.play()).toBe(false);
+    expect(model.animated.logo()).toBe(true);
+    expect(model.animated.table()).toBe(false);
+    expect(model.animated.links()).toBe(false);
 
     // Trigger event on banner
     var evt = $.Event('transitionend');
-    $('#banner').trigger(evt);
+    $('#mainBox').trigger(evt);
 
-    expect(model.animations.main.play()).toBe(true);
-    expect(model.animations.table.play()).toBe(true);
-    expect(model.animations.rows.play()).toBe(false);
+    expect(model.animated.logo()).toBe(true);
+    expect(model.animated.table()).toBe(true);
+    expect(model.animated.links()).toBe(false);
 
     spyOn(model, 'repositionCopyLinks');
 
-    $('.link-table-container').trigger(evt);
+    // Create a new event
+    evt = $.Event('transitionend');
+    $('.table-container').trigger(evt);
 
-    expect(model.animations.main.play()).toBe(true);
-    expect(model.animations.table.play()).toBe(true);
-    expect(model.animations.rows.play()).toBe(true);
+    expect(model.animated.logo()).toBe(true);
+    expect(model.animated.table()).toBe(true);
+    expect(model.animated.links()).toBe(true);
 
     expect(model.repositionCopyLinks).toHaveBeenCalled();
   });
@@ -104,22 +101,32 @@ describe('model operations', function() {
     it('should call the comms layer to post a link', function() {
       var link = 'https://github.com/jmhorak';
 
-      spyOn(kilius.comms, 'postNewLink');
-      model.newLink(link);
+      spyOn(kilius.comms, 'postNewLink').andReturn(new Promise());
+      model.link(link);
       model.postLink();
 
-      expect(kilius.comms.postNewLink).toHaveBeenCalledWith(link, model.addNewLink);
+      expect(kilius.comms.postNewLink).toHaveBeenCalledWith(link);
+    });
+
+    it('should add the http protocol before submitting to the server', function() {
+      var link = 'github.com/jmhorak';
+
+      spyOn(kilius.comms, 'postNewLink').andReturn(new Promise());
+      model.link(link);
+      model.postLink();
+
+      expect(kilius.comms.postNewLink).toHaveBeenCalledWith('http://' + link);
     });
   });
 
   describe('adding history links', function() {
 
     var links = [
-      { date: new Date(2010, 8, 18) },
-      { date: new Date(2011, 9, 12) },
-      { date: new Date(2008, 7, 19) },
-      { date: new Date(2012, 4, 15) },
-      { date: new Date(2009, 11, 1) }
+      { createDate: new Date(2010, 8, 18) },
+      { createDate: new Date(2011, 9, 12) },
+      { createDate: new Date(2008, 7, 19) },
+      { createDate: new Date(2012, 4, 15) },
+      { createDate: new Date(2009, 11, 1) }
     ];
 
     beforeEach(function() {
@@ -161,7 +168,7 @@ describe('model operations', function() {
       var postedShortLink = 'http://kili.us/+/234',
           postedLongLink = 'https://github.com/jmhorak';
 
-      model.newLink(postedLongLink);
+      model.link(postedLongLink);
       model.errorMsg('This is an error');
 
       spyOn(model, 'repositionCopyLinks');
@@ -178,7 +185,7 @@ describe('model operations', function() {
       expect(addedLink.hits).toEqual(0);
       expect(addedLink.date).isWithinTenSeconds(new Date());
 
-      expect(model.newLink()).toEqual('');
+      expect(model.link()).toEqual('');
       expect(model.errorMsg()).toEqual('');
 
       expect(model.repositionCopyLinks).toHaveBeenCalled();

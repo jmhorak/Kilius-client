@@ -90,7 +90,7 @@ function KiliusLink(content) {
   // Static content
   self.shortLink = content.shortLink || '';
   self.longLink = content.longLink || '';
-  self.hits = content.hits.length || 0;
+  self.hits = content.hits ? (content.hits.length || 0) : 0;
   self.date = content.createDate || new Date();
   self.clip = null;
 
@@ -212,7 +212,9 @@ function KiliusModel() {
   self.showTable = function() {
     if (self.hasLinks()) {
       element = $('.table-container')[0];
-      element.className = element.className.replace('fromTop', 'toBottom');
+      if (element) {
+        element.className = element.className.replace('fromTop', 'toBottom');
+      }
     }
   }
 

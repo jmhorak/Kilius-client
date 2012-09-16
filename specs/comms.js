@@ -17,43 +17,100 @@ describe('communicating with the server', function() {
         exceptionText = 'Exception text',
         statusText = 'some status text',
         processStatusText = 'Some status text',
-        serverText = 'Oops there was an error';
+        serverText = 'Oops there was an error',
+        jqXHR,
+        textStatus,
+        errorThrown,
+        spy,
+        notCalled;
 
-    // undefined parameters should still work
+    beforeEach(function() {
+      spyOn($, 'ajax').andCallFake(function(arg) {
+        return arg.error(jqXHR, textStatus, errorThrown);
+      });
+
+      spy = jasmine.createSpy();
+      notCalled = jasmine.createSpy();
+    });
+
+    it('should generate a default error message with undefined parameters', function() {
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(generic + 'Error - ' + general);
+      expect(notCalled).not.toHaveBeenCalled();
+    });
+
     it('should generate a default error message when none is given', function() {
-      comms.onLinkAddError();
-      expect(comms.errorMsg()).toEqual(generic + 'Error - ' + general);
+      jqXHR = {};
+      textStatus = '';
+      errorThrown = '';
 
-      comms.onLinkAddError({}, '', '');
-      expect(comms.errorMsg()).toEqual(generic + 'Error - ' + general);
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(generic + 'Error - ' + general);
+      expect(notCalled).not.toHaveBeenCalled();
     });
 
     // Just exception text should still work
     it('should use the exception thrown to build an error message', function() {
-      comms.onLinkAddError({}, '', exceptionText);
-      expect(comms.errorMsg()).toEqual(generic + 'Error - ' + exceptionText);
+      jqXHR = {};
+      textStatus = '';
+      errorThrown = exceptionText;
+
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(generic + 'Error - ' + exceptionText);
+      expect(notCalled).not.toHaveBeenCalled();
+    });
+
+    it('should use the text status to build an error message', function() {
+      jqXHR = {};
+      textStatus = statusText;
+      errorThrown = '';
+
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(generic + processStatusText + ' - ' + general);
+      expect(notCalled).not.toHaveBeenCalled();
     });
 
     // Build an error message from status text and the exception
-    it('should use the text status to build an error message', function() {
-      comms.onLinkAddError({}, statusText, exceptionText);
-      expect(comms.errorMsg()).toEqual(generic + processStatusText + ' - ' + exceptionText);
+    it('should use the text status with the exception text to build an error message', function() {
+      jqXHR = {};
+      textStatus = statusText;
+      errorThrown = exceptionText;
 
-      comms.onLinkAddError({}, statusText, '');
-      expect(comms.errorMsg()).toEqual(generic + processStatusText + ' - ' + general);
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(generic + processStatusText + ' - ' + exceptionText);
+      expect(notCalled).not.toHaveBeenCalled();
     });
 
     // Error message returned from the server
     it('should use the error message encoded in the response', function() {
-      comms.onLinkAddError({ responseText: '{ "message": "' + serverText + '" }' });
-      expect(comms.errorMsg()).toEqual(serverText);
+      jqXHR = { responseText: '{ "message": "' + serverText + '" }' };
+      textStatus = '';
+      errorThrown = '';
 
-      comms.onLinkAddError({ responseText: '{ "message": "' + serverText + '" }' }, statusText, exceptionText);
-      expect(comms.errorMsg()).toEqual(serverText);
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(serverText);
+      expect(notCalled).not.toHaveBeenCalled();
+    });
+
+    it('should use the error message encoded in the response over all other text', function() {
+      jqXHR = { responseText: '{ "message": "' + serverText + '" }' };
+      textStatus = statusText;
+      errorThrown = exceptionText;
+
+      comms.postNewLink().then(notCalled, spy);
+
+      expect(spy).toHaveBeenCalledWith(serverText);
+      expect(notCalled).not.toHaveBeenCalled();
     });
   });
 
-  describe('successful response from server', function() {
+  xdescribe('successful response from server', function() {
 
     var cb = null;
 
