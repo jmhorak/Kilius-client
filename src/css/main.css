@@ -145,8 +145,7 @@ body {
   margin: 0 auto; }
   .logo #bigK {
     position: relative;
-    top: 0.17em;
-    font-style: italic; }
+    top: 0.17em; }
   .logo .logoText {
     position: relative;
     margin-left: 6px; }
@@ -154,7 +153,8 @@ body {
 .titleText {
   font-size: 3.0em;
   font-weight: 700;
-  text-align: center; }
+  text-align: center;
+  font-style: italic; }
   .titleText .accentText {
     font-size: 1.54em; }
 
@@ -501,10 +501,7 @@ footer {
     font-size: 3.8em; }
 
   .backdrop {
-    padding-top: 2.9em; }
-
-  .logoText {
-    margin-left: 10px; } }
+    padding-top: 2.9em; } }
 @media only screen and (min-width: 600px) {
   .logo {
     text-align: center;
@@ -513,7 +510,7 @@ footer {
     .logo #bigK {
       top: 0.37em; }
     .logo .logoText {
-      margin-left: 20px; }
+      margin-right: 12px; }
 
   .titleText {
     font-size: 6.0em; }

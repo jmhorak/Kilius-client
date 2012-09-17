@@ -224,7 +224,6 @@ body {
   #bigK {
     position: relative;
     top: 0.17em;
-    font-style: italic;
   }
 
   .logoText {
@@ -237,6 +236,7 @@ body {
   font-size: 3.0em;
   font-weight: 700;
   text-align: center;
+  font-style: italic;
 
   .accentText {
     font-size: 1.54em;
@@ -646,10 +646,6 @@ footer {
   .backdrop {
     padding-top: 2.9em;
   }
-
-  .logoText {
-    margin-left: 10px;
-  }
 }
 
 @media only screen and (min-width: 600px) {
@@ -663,7 +659,7 @@ footer {
     }
 
     .logoText {
-      margin-left: 20px;
+      margin-right: 12px;
     }
   }
 
