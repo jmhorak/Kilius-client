@@ -147,8 +147,7 @@ body {
     position: relative;
     top: 0.17em; }
   .logo .logoText {
-    position: relative;
-    margin-left: 6px; }
+    position: relative; }
 
 .titleText {
   font-size: 3.0em;
@@ -510,7 +509,7 @@ footer {
     .logo #bigK {
       top: 0.37em; }
     .logo .logoText {
-      margin-right: 12px; }
+      margin-left: 12px; }
 
   .titleText {
     font-size: 6.0em; }
