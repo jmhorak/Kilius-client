@@ -142,7 +142,7 @@ textarea {
 }
 
 @mixin animated-gradient($dark, $mid, $light, $per: 60%, $pos: 100%, $timing: 100ms) {
-  background-color: $light;
+  background-color: $mid;
   background-image: -webkit-linear-gradient(top, $light, $mid $per, $dark);
   background-image:    -moz-linear-gradient(top, $light, $mid $per, $dark);
   background-image:     -ms-linear-gradient(top, $light, $mid $per, $dark);
@@ -296,12 +296,17 @@ body {
     font-size: 0.9375em; /* 15/16 */
     padding: 0.66666666em 1em 0.73333333em; /* 10/15 15/15 11/15 */
     text-decoration: none;
+
+    .ie & {
+      top: -3px;
+      padding-bottom: 0.8em;
+    }
   }
 
   .connected-btn {
     border: 0.13333333em solid $border; /* 2/15 */
     border-left: none;
-    left: -0.266666666666em;
+    left: -0.3em;
     position: relative;
   }
 }

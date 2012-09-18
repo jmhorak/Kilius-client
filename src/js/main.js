@@ -395,4 +395,9 @@ $(document).ready(function() {
     // Set ZeroClipboard's path
     ZeroClipboard.setMoviePath('/flash/ZeroClipboard.swf');
   }, 1);
+
+  // Detect IE and add class
+  if (/\bMSIE\b/.test(navigator.userAgent)) {
+    $('html').addClass('ie');
+  }
 });

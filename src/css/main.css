@@ -202,11 +202,14 @@ body {
     padding: 0.66666666em 1em 0.73333333em;
     /* 10/15 15/15 11/15 */
     text-decoration: none; }
+    .ie .content .button {
+      top: -3px;
+      padding-bottom: 0.8em; }
   .content .connected-btn {
     border: 0.133em solid #0095ff;
     /* 2/15 */
     border-left: none;
-    left: -0.267em;
+    left: -0.3em;
     position: relative; }
 
 #mainBox {
@@ -233,7 +236,7 @@ body {
 
 .contrast {
   color: #131313;
-  background-color: #ace556;
+  background-color: #88ca22;
   background-image: -webkit-linear-gradient(top, #ace556, #88ca22 60%, #729839);
   background-image: -moz-linear-gradient(top, #ace556, #88ca22 60%, #729839);
   background-image: -ms-linear-gradient(top, #ace556, #88ca22 60%, #729839);
