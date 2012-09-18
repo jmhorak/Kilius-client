@@ -203,12 +203,6 @@ function KiliusModel() {
     }
   });
 
-  // If animation is not supported, just immediately resolve
-  if (!self.supportAnimation) {
-    animatedLogo.resolve();
-    animatedTable.resolve();
-  }
-
   self.showTable = function() {
     if (self.hasLinks()) {
       element = $('.table-container')[0];
@@ -288,6 +282,11 @@ function KiliusModel() {
   kilius.comms.getUserHistory(self.user).then(self.addUserHistoryFromJSON);
 
   self.animated.logo(true);
+  // If animation is not supported, just immediately resolve
+  if (!self.supportAnimation) {
+    animatedLogo.resolve();
+    animatedTable.resolve();
+  }
 }
 
 function KiliusComms() {

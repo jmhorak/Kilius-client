@@ -169,9 +169,9 @@ $hover: #113551;
 $border: #0095FF;
 
 /* Complimentary Colors */
-$comp: #C18D48;
-$darkerComp: #A5783E;
-$lighterComp: #E0B377;
+$comp: #88CA22;
+$darkerComp: #729839;
+$lighterComp: #ACE556;
 
 $link: #5397C7;
 $linkHover: #DCE3F3;
@@ -187,7 +187,7 @@ $darkGray: #353535;
 $lighterGray: #454545;
 
 /* Shadows */
-$shadow: gray;
+$shadow: #390B60;
 $darkShadow: rgba(69, 69, 69, 0.7);
 $lightShadow: rgba(102, 102, 102, 0.7);
 
@@ -282,22 +282,27 @@ body {
   input {
     width: 50.575%; /* 0.85 * 0.85 * 0.7 */
     max-width: 300px;
-    padding: 11px 15px;
-
-    & + .connected-btn {
-      left: -4px;
-      position: relative;
-    }
+    height: 1em;
+    line-height: 1.4em;
+    padding: 0.8125em 0.9375em; /* 13/16 15/16 */
   }
 
   .connected-input {
-    border: 2px solid $border;
+    border: 0.125em solid $border; /* 2/16 */
     border-right: none;
   }
 
+  .button {
+    font-size: 0.9375em; /* 15/16 */
+    padding: 0.66666666em 1em 0.73333333em; /* 10/15 15/15 11/15 */
+    text-decoration: none;
+  }
+
   .connected-btn {
-    border: 2px solid $border;
+    border: 0.13333333em solid $border; /* 2/15 */
     border-left: none;
+    left: -0.266666666666em;
+    position: relative;
   }
 }
 
@@ -318,32 +323,25 @@ body {
 .well {
   background-color: $base;
   @include linear-gradient-bottom($base, $baseAccent);
-  padding: 30px;
+  padding: 1.875em;
   text-align: center;
   border: solid 3px $baseAccent;
 }
 
 .contrast {
-  background-color: $comp;
   color: $darker;
   @include animated-gradient($darkerComp, $comp, $lighterComp);
 
   &:active {
-    top: 3px;
+    top: 1px;
     @include linear-gradient-bottom($comp, $darkerComp);
   }
 
   &:hover {
     color: $hover;
-    text-shadow: 1px 0 1px $shadow;
+    text-shadow: 0 0 10px $shadow;
     background-position: 0 0;
   }
-}
-
-.button {
-  font-size: 15px;
-  padding: 12px 15px 11px;
-  text-decoration: none;
 }
 
 .table-container {
@@ -671,12 +669,12 @@ footer {
   }
 
   .well {
-    padding: 50px;
+    padding: 1.875em; /* 30/16 */
   }
 
   .content {
     input {
-      margin-left: 20px;
+      margin-left: 1.25em; /* 20/16 */
     }
   }
 
