@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin" type="text/css">
   <script src="js/vendor/modernizr-2.6.1.min.js"></script>
 </head>
-<body data-bind="css: { hasError: errorMsg().length > 0 }">
+<body data-bind="css: { 'has-error': errorMsg().length > 0 }">
 
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade
@@ -28,18 +28,18 @@
 
 <div id="container" class="">
   <header>
-    <h1 class="base logo titleText" data-bind="css: {
+    <h1 class="base logo title-text" data-bind="css: {
                      base: !animated.logo(),
                      dark: animated.logo(),
                      'color-change': supportAnimation
                    }">
-      <span id="bigK" class="accentText high-rise"
-            data-bind="css: { softenDark: animated.table() }">K</span><span
-            class="low-rise logoText">ili.us</span>
+      <span id="big-K" class="accent-text high-rise"
+            data-bind="css: { 'soften-dark': animated.table() }">K</span><span
+            class="low-rise logo-text">ili.us</span>
     </h1>
   </header>
 
-  <div id="mainBox" class="centered glossy lg-box backdrop transparent"
+  <div id="main-box" class="centered glossy lg-box backdrop transparent"
        data-bind="opacity: animated.logo(),
                   css: { 'long-delay-fade': supportAnimation }">
 
@@ -64,7 +64,7 @@
       >
     </form>
 
-    <div class='table-container fromTop'
+    <div class='table-container from-top'
          data-bind="opacity: animated.table() && hasLinks(),
                     css: {
                        'slide': supportAnimation,
@@ -86,8 +86,9 @@
         <tbody class="link-history" data-bind="foreach: links(), visible: hasLinks()">
         <tr>
           <td data-bind="visible: $root.supportFlash">
-            <div class="copy-cell" data-bind="copyElement: updatePosition()">
-              <i class="icon-copy"></i>
+            <div class="copy-cell icon-copy"
+                 data-bind="click: $root.copyLink, copyElement: updatePosition()">
+              &#xf0c5
             </div>
           </td>
           <td class="short-link-cell">
@@ -104,7 +105,7 @@
   </div>
   <footer class="bottom">
     <div class="copyright shadowed-text">
-      Made by <a class="siteBtn" id="blogLink" href="http://jeffhorak.com">Jeff Horak</a> in 2012
+      Made by <a class="site-btn" id="blogLink" href="http://jeffhorak.com">Jeff Horak</a> in 2012
     </div>
   </footer>
 </div>

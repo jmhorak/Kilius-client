@@ -86,12 +86,6 @@ textarea {
   unicode-range: U+f0c5;
   /* Only need a single icon */ }
 
-.icon-copy::before {
-  content: "\f0c5";
-  font: normal normal normal 1.3333333333333333em FontAwesome;
-  display: inline-block;
-  text-decoration: inherit; }
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
@@ -127,13 +121,13 @@ body {
   -o-transition: background-position 500ms ease-out 0;
   transition: background-position 500ms ease-out 0; }
 
-.hasError {
+.has-error {
   background-position: 0 70%; }
 
 .dark {
   color: #202020; }
 
-.softenDark {
+.soften-dark {
   color: #252525;
   text-shadow: -3px -3px 4px rgba(69, 69, 69, 0.7), 1px 1px 4px rgba(102, 102, 102, 0.7); }
 
@@ -143,18 +137,18 @@ body {
 .logo {
   position: relative;
   margin: 0 auto; }
-  .logo #bigK {
+  .logo #big-K {
     position: relative;
     top: 0.17em; }
-  .logo .logoText {
+  .logo .logo-text {
     position: relative; }
 
-.titleText {
+.title-text {
   font-size: 3.0em;
   font-weight: 700;
   text-align: center;
   font-style: italic; }
-  .titleText .accentText {
+  .title-text .accent-text {
     font-size: 1.54em; }
 
 .high-rise {
@@ -202,7 +196,7 @@ body {
     box-sizing: content-box;
     border-left: none; }
 
-#mainBox {
+#main-box {
   position: relative;
   top: -4.8em; }
 
@@ -291,15 +285,24 @@ body {
   width: 2.1em;
   display: none; }
 .link-table .copy-cell {
-  text-align: center; }
-  .link-table .copy-cell i {
-    -webkit-transition: color 150ms ease-out 0;
-    -moz-transition: color 150ms ease-out 0;
-    -ms-transition: color 150ms ease-out 0;
-    -o-transition: color 150ms ease-out 0;
-    transition: color 150ms ease-out 0; }
-  .link-table .copy-cell.hover i {
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  -webkit-transition: color 150ms ease-out 0;
+  -moz-transition: color 150ms ease-out 0;
+  -ms-transition: color 150ms ease-out 0;
+  -o-transition: color 150ms ease-out 0;
+  transition: color 150ms ease-out 0; }
+  .link-table .copy-cell.hover {
     color: #dce3f3; }
+  .link-table .copy-cell.active {
+    position: relative;
+    top: 2px; }
+.link-table .icon-copy {
+  font: normal normal normal 1.25em FontAwesome;
+  text-decoration: inherit;
+  color: gray;
+  padding: 2px; }
 .link-table .hits-cell {
   display: none; }
 .link-table .link {
@@ -319,10 +322,10 @@ body {
   line-height: 1.5em;
   margin-bottom: 10px; }
 
-.fromTop {
+.from-top {
   top: -8em; }
 
-.toBottom {
+.to-bottom {
   top: 0; }
 
 footer {
@@ -504,7 +507,7 @@ footer {
     padding: 1.875em;
     /* 30/16 */ } }
 @media only screen and (min-width: 525px) {
-  .titleText {
+  .title-text {
     font-size: 3.8em; }
 
   .backdrop {
@@ -514,12 +517,12 @@ footer {
     text-align: center;
     left: -0.9em;
     top: 0.58em; }
-    .logo #bigK {
+    .logo #big-K {
       top: 0.37em; }
-    .logo .logoText {
+    .logo .logo-text {
       margin-left: 12px; }
 
-  .titleText {
+  .title-text {
     font-size: 6.0em; }
 
   .backdrop {

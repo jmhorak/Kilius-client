@@ -179,6 +179,7 @@ function KiliusModel() {
     var element;
 
     self.animated.table(true);
+    $('.url-input')[0].focus();
 
     // Start the table animation
     historyFetched.whenDone(self.showTable);
@@ -191,7 +192,7 @@ function KiliusModel() {
   });
 
   // Animation Events
-  $('#mainBox').bind(animationEndEvents, function(evt) {
+  $('#main-box').bind(animationEndEvents, function(evt) {
     if (evt.target === this) {
       animatedLogo.resolve();
     }
@@ -207,7 +208,7 @@ function KiliusModel() {
     if (self.hasLinks()) {
       element = $('.table-container')[0];
       if (element) {
-        element.className = element.className.replace('fromTop', 'toBottom');
+        element.className = element.className.replace('from-top', 'to-bottom');
       }
     }
   }
