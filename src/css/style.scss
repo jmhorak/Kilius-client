@@ -140,7 +140,7 @@ textarea {
   background-image:    -moz-linear-gradient(top, $light, $mid $per, $dark);
   background-image:     -ms-linear-gradient(top, $light, $mid $per, $dark);
   background-image:      -o-linear-gradient(top, $light, $mid $per, $dark);
-  background-image:         linear-gradient(to bottom, $dark, $mid $per, $light);
+  background-image:         linear-gradient(to top, $dark, $mid $per, $light);
 
   background-position: 0 $pos;
   background-attachment: fixed; /* Don't allow the background to scroll */
@@ -287,6 +287,9 @@ body {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     border-left: none;
+
+    position: relative;
+    left: -0.25em; /* 4/16 */
   }
 }
 
