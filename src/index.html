@@ -51,17 +51,17 @@
       <section class="err err-well"
                data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
 
-      <input type="url"
-             class="rounded-left connected-input"
+      <input
+             type="url"
+             class="url-input rounded-left connected"
              data-bind="value: link"
              placeholder="Enter a URL"
-             id="url-input"
-             maxlength="2048"><a href="#"
-         class="button contrast connected-btn rounded-right"
-         id="submit-btn"
-         data-bind="click: postLink">
-        Shorten
-      </a>
+             maxlength="2048"
+      ><input
+            type="submit"
+            class="submit-btn contrast connected rounded-right"
+            data-bind="click: postLink" value="Shorten"
+      >
     </form>
 
     <div class='table-container fromTop'

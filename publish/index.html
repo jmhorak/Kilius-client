@@ -14,7 +14,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
   <link rel="stylesheet" href="css/8e2b1132.normalize.css">
-  <link rel="stylesheet" href="css/60ae44a9.main.css">
+  <link rel="stylesheet" href="css/93fb9414.main.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin" type="text/css">
   <script src="js/vendor/cf69c6f2.modernizr-2.6.1.min.js"></script>
 </head>
@@ -51,17 +51,17 @@
       <section class="err err-well"
                data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
 
-      <input type="url"
-             class="rounded-left connected-input"
+      <input
+             type="url"
+             class="url-input rounded-left connected"
              data-bind="value: link"
              placeholder="Enter a URL"
-             id="url-input"
-             maxlength="2048"><a href="#"
-         class="button contrast connected-btn rounded-right"
-         id="submit-btn"
-         data-bind="click: postLink">
-        Shorten
-      </a>
+             maxlength="2048"
+      ><input
+            type="submit"
+            class="submit-btn contrast connected rounded-right"
+            data-bind="click: postLink" value="Shorten"
+      >
     </form>
 
     <div class='table-container fromTop'
