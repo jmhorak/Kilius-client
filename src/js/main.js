@@ -386,6 +386,9 @@ function KiliusComms() {
 window.kilius = {};
 
 $(document).ready(function() {
+  var browserInfo = $.browser,
+      htmlRoot = $('html');
+
   // Defer until the UI is completely set-up
   setTimeout(function() {
     kilius.comms = new KiliusComms();
@@ -396,8 +399,18 @@ $(document).ready(function() {
     ZeroClipboard.setMoviePath('/flash/ZeroClipboard.swf');
   }, 1);
 
-  // Detect IE and add class
-  if (/\bMSIE\b/.test(navigator.userAgent)) {
-    $('html').addClass('ie');
+  // Detect IE, FF, Opera, and Webkit
+  if (browserInfo.msie) {
+    htmlRoot.addClass('msie');
+
+  } else if (browserInfo.mozilla) {
+    htmlRoot.addClass('moz');
+
+  } else if (browserInfo.webkit) {
+    htmlRoot.addClass('webkit');
+
+  } else if (browserInfo.opera) {
+    htmlRoot.addClass('opera');
   }
+
 });

@@ -181,8 +181,7 @@ body {
 .content {
   position: relative;
   max-width: 500px;
-  width: 72.25%;
-  /* 0.85 * 0.85 */
+  width: 90%;
   border-radius: 20px/12px; }
   .content input {
     width: 50.575%;
@@ -190,27 +189,24 @@ body {
     max-width: 300px;
     height: 1em;
     line-height: 1.4em;
-    padding: 0.8125em 0.9375em;
-    /* 13/16 15/16 */ }
+    padding: 0.625em 0.9375em;
+    /* 10/16 15/16 */ }
   .content .connected-input {
-    border: 0.125em solid #0095ff;
-    /* 2/16 */
+    border: 0.188em solid #0095ff;
+    /* 3/16 */
     border-right: none; }
   .content .button {
-    font-size: 0.9375em;
-    /* 15/16 */
-    padding: 0.66666666em 1em 0.73333333em;
-    /* 10/15 15/15 11/15 */
+    padding: 0.625em 1em;
+    /* 10/16 */
     text-decoration: none; }
-    .ie .content .button {
-      top: -3px;
-      padding-bottom: 0.8em; }
+    .msie .content .button {
+      /*padding-bottom: 11px; */ }
   .content .connected-btn {
-    border: 0.133em solid #0095ff;
-    /* 2/15 */
+    border: 0.188em solid #0095ff;
+    /* 3/15 */
     border-left: none;
-    left: -0.3em;
-    position: relative; }
+    /*left: -0.3em;
+    position: relative; */ }
 
 #mainBox {
   position: relative;
@@ -230,7 +226,6 @@ body {
   background-image: -ms-linear-gradient(bottom, #1f5f8d, #3c80b0);
   background-image: -o-linear-gradient(bottom, #1f5f8d, #3c80b0);
   background-image: linear-gradient(to bottom, #1f5f8d, #3c80b0);
-  padding: 1.875em;
   text-align: center;
   border: solid 3px #3c80b0; }
 
@@ -502,6 +497,16 @@ footer {
    Theses examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
+@media only screen and (min-width: 450px) {
+  .content {
+    width: 72.25%;
+    /* 0.85 * 0.85 */ }
+    .content .button {
+      padding: 10px 1em; }
+
+  .well {
+    padding: 1.875em;
+    /* 30/16 */ } }
 @media only screen and (min-width: 525px) {
   .titleText {
     font-size: 3.8em; }
@@ -523,10 +528,6 @@ footer {
 
   .backdrop {
     padding: 5.5em 0 5px; }
-
-  .well {
-    padding: 1.875em;
-    /* 30/16 */ }
 
   .content input {
     margin-left: 1.25em;

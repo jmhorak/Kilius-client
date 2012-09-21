@@ -276,7 +276,7 @@ body {
 .content  {
   position: relative;
   max-width: 500px;
-  width: 72.25%; /* 0.85 * 0.85 */
+  width: 90%;
   border-radius: 20px / 12px;
 
   input {
@@ -284,30 +284,28 @@ body {
     max-width: 300px;
     height: 1em;
     line-height: 1.4em;
-    padding: 0.8125em 0.9375em; /* 13/16 15/16 */
+    padding: 0.625em 0.9375em; /* 10/16 15/16 */
   }
 
   .connected-input {
-    border: 0.125em solid $border; /* 2/16 */
+    border: 0.1875em solid $border; /* 3/16 */
     border-right: none;
   }
 
   .button {
-    font-size: 0.9375em; /* 15/16 */
-    padding: 0.66666666em 1em 0.73333333em; /* 10/15 15/15 11/15 */
+    padding: 0.625em 1em; /* 10/16 */
     text-decoration: none;
 
-    .ie & {
-      top: -3px;
-      padding-bottom: 0.8em;
+    .msie & {
+      /*padding-bottom: 11px; */
     }
   }
 
   .connected-btn {
-    border: 0.13333333em solid $border; /* 2/15 */
+    border: 0.1875em solid $border; /* 3/15 */
     border-left: none;
-    left: -0.3em;
-    position: relative;
+    /*left: -0.3em;
+    position: relative; */
   }
 }
 
@@ -328,7 +326,6 @@ body {
 .well {
   background-color: $base;
   @include linear-gradient-bottom($base, $baseAccent);
-  padding: 1.875em;
   text-align: center;
   border: solid 3px $baseAccent;
 }
@@ -639,6 +636,19 @@ footer {
    Theses examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
+@media only screen and (min-width: 450px) {
+  .content {
+    width: 72.25%; /* 0.85 * 0.85 */
+
+    .button {
+      padding: 10px 1em;
+    }
+  }
+
+  .well {
+    padding: 1.875em; /* 30/16 */
+  }
+}
 
 @media only screen and (min-width: 525px) {
   .titleText {
@@ -671,10 +681,6 @@ footer {
 
   .backdrop {
     padding: 5.5em 0 5px;
-  }
-
-  .well {
-    padding: 1.875em; /* 30/16 */
   }
 
   .content {
