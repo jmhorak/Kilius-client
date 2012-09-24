@@ -256,7 +256,10 @@ function KiliusModel() {
 
     // Ensure the links list is sorted by date
     links.sort(function(a, b) {
-      return b.createDate - a.createDate;
+      var d1 = new Date(a.createDate),
+          d2 = new Date(b.createDate);
+
+      return d2 - d1;
     });
 
     // Populate the links list

@@ -47,12 +47,12 @@
           data-bind="opacity: animated.logo(),
                            css: { 'long-delay-fade': supportAnimation },
                            submit: postLink">
-
-      <section class="err err-well"
-               data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
-
+      <label for="url-input" class="visuallyhidden">
+        Enter a URL
+      </label>
       <input
              type="url"
+             id="url-input"
              class="url-input rounded-left connected"
              data-bind="value: link"
              placeholder="Enter a URL"
@@ -62,6 +62,8 @@
             class="submit-btn contrast connected rounded-right"
             data-bind="click: postLink" value="Shorten"
       >
+      <section class="err err-well"
+               data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
     </form>
 
     <div class='table-container from-top'

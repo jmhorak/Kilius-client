@@ -14,7 +14,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
   <link rel="stylesheet" href="css/8e2b1132.normalize.css">
-  <link rel="stylesheet" href="css/9d280f6c.main.css">
+  <link rel="stylesheet" href="css/54db5306.main.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin" type="text/css">
   <script src="js/vendor/cf69c6f2.modernizr-2.6.1.min.js"></script>
 </head>
@@ -47,12 +47,12 @@
           data-bind="opacity: animated.logo(),
                            css: { 'long-delay-fade': supportAnimation },
                            submit: postLink">
-
-      <section class="err err-well"
-               data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
-
+      <label for="url-input" class="visuallyhidden">
+        Enter a URL
+      </label>
       <input
              type="url"
+             id="url-input"
              class="url-input rounded-left connected"
              data-bind="value: link"
              placeholder="Enter a URL"
@@ -62,6 +62,8 @@
             class="submit-btn contrast connected rounded-right"
             data-bind="click: postLink" value="Shorten"
       >
+      <section class="err err-well"
+               data-bind="visible: errorMsg().length > 0, text: errorMsg"></section>
     </form>
 
     <div class='table-container from-top'
@@ -116,7 +118,7 @@
 <script src="js/vendor/294e46d2.knockout-2.1.0.js"></script>
 <script src="js/vendor/6ab42b5f.promise.js"></script>
 <script src="js/d3db12f3.plugins.js"></script>
-<script src="js/0e278d48.main.js"></script>
+<script src="js/563f7d17.main.js"></script>
 
 <script>
   var _gaq = [
