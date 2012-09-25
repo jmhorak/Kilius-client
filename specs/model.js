@@ -53,7 +53,7 @@ describe('animating the app', function() {
   var model = {};
 
   beforeEach(function() {
-    jasmine.getFixtures().set('<div id="mainBox"></div><div class="table-container"></div>');
+    jasmine.getFixtures().set('<div id="main-box"></div><div class="table-container"></div>');
     model = new KiliusModel();
   });
 
@@ -65,7 +65,7 @@ describe('animating the app', function() {
 
     // Trigger event on banner
     var evt = $.Event('transitionend');
-    $('#mainBox').trigger(evt);
+    $('#main-box').trigger(evt);
 
     expect(model.animated.logo()).toBe(true);
     expect(model.animated.table()).toBe(true);

@@ -191,10 +191,12 @@ function KiliusModel() {
 
   // Promise for when the logo finishes animating
   animatedLogo.whenDone(function() {
-    var element;
+    var element = $('.url-input')[0];
 
     self.animated.table(true);
-    $('.url-input')[0].focus();
+    if (element) {
+      element.focus();
+    }
 
     // Start the table animation
     historyFetched.whenDone(self.showTable);
