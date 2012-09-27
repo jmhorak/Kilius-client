@@ -276,7 +276,8 @@ body {
     color: gray;
     vertical-align: middle;
     text-overflow: ellipsis;
-    overflow: hidden; }
+    overflow: hidden;
+    white-space: nowrap; }
   .data-table .numeric {
     text-align: right; }
 
