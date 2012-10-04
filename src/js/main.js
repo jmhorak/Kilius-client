@@ -142,8 +142,8 @@ function KiliusModel() {
 
     // Look to see if it at all resembles a URL
     if (/.*\..*/.test(link)) {
-      // Look for a protocol, if none present, use http
-      if (!/.*:.*/.test(link)) {
+      // Look for a WWW protocol, if none present, use http
+      if (!/^http*/.test(link)) {
        link = 'http://' + link;
       }
     }
